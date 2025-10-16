@@ -51,4 +51,4 @@ const words = [
   }
   // ...你可以繼續加更多
 ];
-add words.js
+
