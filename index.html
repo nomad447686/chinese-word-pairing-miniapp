@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <title>小學生中文字中英配對遊戲</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: "Microsoft JhengHei", Arial, sans-serif; background: #f6f8fb; margin:0; padding:0; }
+    .container { max-width:400px; margin:40px auto; background:white; padding:30px 18px; box-shadow:0 4px 12px #eee; border-radius:12px;}
+    img { max-width:80px; margin:16px 0;}
+    .word { font-size:2rem; margin:18px 0;}
+    .options { margin:18px 0;}
+    .option-btn { background:#eee; border-radius:8px; border:none; padding:10px 14px; margin:4px; font-size:1.2rem; cursor:pointer; }
+    .option-btn.correct { background:#c8f7c5;}
+    .option-btn.wrong { background:#ffc6c6;}
+    .score { margin-top:18px; font-size:1.4rem; color:#555;}
+    .next-btn { margin:24px 0; font-size:1.1rem; background:#56aaff; color:white; border:none; border-radius:8px; padding:9px 18px;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>小學二年級中文字中英配對</h2>
+    <div id="game"></div>
+    <div class="score" id="scoreBox"></div>
+    <button class="next-btn" id="nextBtn" style="display:none;">下一題</button>
+  </div>
+  <script src="words.js"></script>
+  <script>
+    let idx = 0, score = 0;
+    let order = [...Array(words.length).keys()].sort(() => Math.random()-0.5);
+
+    function render() {
+      if (idx >= words.length) {
+        document.getElementById('game').innerHTML = `<p>完成遊戲！總分: ${score} / ${words.length} </p>`;
+        document.getElementById('nextBtn').style.display = 'none';
+        return;
+      }
+      let q = words[order[idx]];
+      let options = [q.english];
+      while (options.length < 3) {
+        let other = words[Math.floor(Math.random()*words.length)].english;
+        if (!options.includes(other)) options.push(other);
+      }
+      options = options.sort(() => Math.random()-0.5);
+
+      document.getElementById('game').innerHTML = `
+        <img src="${q.image}" alt="pic">
+        <div class="word">${q.chinese}</div>
+        <div class="options">
+          ${options.map(x =>
+            `<button class="option-btn">${x}</button>`
+          ).join('')}
+        </div>
+      `;
+      document.getElementById('scoreBox').textContent = `目前分數：${score}`;
+      document.querySelectorAll('.option-btn').forEach(btn => {
+        btn.onclick = () => {
+          document.querySelectorAll('.option-btn').forEach(b => b.disabled=true);
+          if (btn.textContent === q.english) {
+            btn.classList.add('correct'); score++;
+            document.getElementById('scoreBox').textContent = '正確！';
+          } else {
+            btn.classList.add('wrong');
+            document.getElementById('scoreBox').textContent = `錯誤！正解：${q.english}`;
+          }
+          document.getElementById('nextBtn').style.display = 'inline-block';
+        };
+      });
+      document.getElementById('nextBtn').onclick = () => {
+        idx++; document.getElementById('nextBtn').style.display = 'none'; render();
+      };
+    }
+    render();
+  </script>
+</body>
+</html>
+add index.html
