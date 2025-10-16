@@ -7,6 +7,7 @@
   <style>
     body { font-family: "Microsoft JhengHei", Arial, sans-serif; background: #f6f8fb; margin:0; padding:0; }
     .container { max-width:400px; margin:40px auto; background:white; padding:30px 18px; box-shadow:0 4px 12px #eee; border-radius:12px;}
+    img { max-width:80px; margin:12px 0;}
     .word { font-size:2rem; margin:18px 0;}
     .options { margin:18px 0;}
     .option-btn { background:#eee; border-radius:8px; border:none; padding:10px 14px; margin:4px; font-size:1.4rem; cursor:pointer; }
@@ -40,6 +41,7 @@
       options = options.sort(() => Math.random() - 0.5);
 
       document.getElementById('game').innerHTML = `
+        <img src="${q.image}" alt="pic">
         <div class="word">${q.english}</div>
         <div class="options">
           ${options.map(x =>
